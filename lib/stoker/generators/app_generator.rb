@@ -1,7 +1,7 @@
 require 'rails/generators'
 require 'rails/generators/rails/app/app_generator'
 
-module Suspenders
+module Stoker
   class AppGenerator < Rails::Generators::AppGenerator
     class_option :database, type: :string, aliases: "-d", default: "postgresql",
       desc: "Configure for selected database (options: #{DATABASES.join("/")})"
@@ -25,18 +25,18 @@ module Suspenders
       desc: "Don't run bundle install"
 
     def finish_template
-      invoke :suspenders_customization
+      invoke :stoker_customization
       super
     end
 
-    def suspenders_customization
+    def stoker_customization
       invoke :customize_gemfile
       invoke :setup_development_environment
       invoke :setup_test_environment
       invoke :setup_production_environment
       invoke :setup_staging_environment
       invoke :setup_secret_token
-      invoke :create_suspenders_views
+      invoke :create_stoker_views
       invoke :configure_app
       invoke :setup_stylesheets
       invoke :install_bitters
@@ -118,8 +118,8 @@ module Suspenders
       build :setup_secret_token
     end
 
-    def create_suspenders_views
-      say 'Creating suspenders views'
+    def create_stoker_views
+      say 'Creating stoker views'
       build :create_partials_directory
       build :create_shared_flashes
       build :create_shared_javascripts
@@ -135,7 +135,7 @@ module Suspenders
       build :disable_xml_params
       build :fix_i18n_deprecation_warning
       build :setup_default_rake_task
-      build :configure_unicorn
+      build :configure_puma
       build :setup_foreman
     end
 
@@ -208,14 +208,14 @@ module Suspenders
     end
 
     def outro
-      say 'Congratulations! You just pulled our suspenders.'
+      say 'Congratulations! You just pulled our stoker.'
       say "Remember to run 'rails generate airbrake' with your API key."
     end
 
     protected
 
     def get_builder_class
-      Suspenders::AppBuilder
+      Stoker::AppBuilder
     end
 
     def using_active_record?

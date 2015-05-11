@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature 'Suspend a new project with default configuration' do
   scenario 'specs pass' do
-    run_suspenders
+    run_stoker
 
     Dir.chdir(project_path) do
       Bundler.with_clean_env do
@@ -12,7 +12,7 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario 'staging config is inherited from production' do
-    run_suspenders
+    run_stoker
 
     staging_file = IO.read("#{project_path}/config/environments/staging.rb")
     config_stub = "Rails.application.configure do"
@@ -21,8 +21,8 @@ feature 'Suspend a new project with default configuration' do
     expect(staging_file).to match(/#{config_stub}/), staging_file
   end
 
-  scenario 'generated .ruby-version is pulled from Suspenders .ruby-version' do
-    run_suspenders
+  scenario 'generated .ruby-version is pulled from Stoker .ruby-version' do
+    run_stoker
 
     ruby_version_file = IO.read("#{project_path}/.ruby-version")
 
@@ -30,7 +30,7 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario 'secrets.yml reads secret from env' do
-    run_suspenders
+    run_stoker
 
     secrets_file = IO.read("#{project_path}/config/secrets.yml")
 
@@ -38,19 +38,19 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario 'action mailer support file is added' do
-    run_suspenders
+    run_stoker
 
     expect(File).to exist("#{project_path}/spec/support/action_mailer.rb")
   end
 
   scenario "i18n support file is added" do
-    run_suspenders
+    run_stoker
 
     expect(File).to exist("#{project_path}/spec/support/i18n.rb")
   end
 
   scenario 'newrelic.yml reads NewRelic license from env' do
-    run_suspenders
+    run_stoker
 
     newrelic_file = IO.read("#{project_path}/config/newrelic.yml")
 
@@ -60,7 +60,7 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario 'records pageviews through Segment if ENV variable set' do
-    run_suspenders
+    run_stoker
 
     expect(analytics_partial).
       to include(%{<% if ENV["SEGMENT_KEY"] %>})
@@ -69,7 +69,7 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario "raises on unpermitted parameters in all environments" do
-    run_suspenders
+    run_stoker
 
     result = IO.read("#{project_path}/config/application.rb")
 
@@ -79,7 +79,7 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario "raises on missing translations in development and test" do
-    run_suspenders
+    run_stoker
 
     %w[development test].each do |environment|
       environment_file =
@@ -91,34 +91,34 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario "specs for missing or unused translations" do
-    run_suspenders
+    run_stoker
 
     expect(File).to exist("#{project_path}/spec/i18n_spec.rb")
   end
 
   scenario "config file for i18n tasks" do
-    run_suspenders
+    run_stoker
 
     expect(File).to exist("#{project_path}/config/i18n-tasks.yml")
   end
 
   scenario "generated en.yml is evaluated" do
-    run_suspenders
+    run_stoker
 
     locales_en_file = IO.read("#{project_path}/config/locales/en.yml")
-    app_name = SuspendersTestHelpers::APP_NAME
+    app_name = StokerTestHelpers::APP_NAME
 
     expect(locales_en_file).to match(/application: #{app_name.humanize}/)
   end
 
   scenario "config simple_form" do
-    run_suspenders
+    run_stoker
 
     expect(File).to exist("#{project_path}/config/initializers/simple_form.rb")
   end
 
   scenario "config :test email delivery method for development" do
-    run_suspenders
+    run_stoker
 
     dev_env_file = IO.read("#{project_path}/config/environments/development.rb")
     expect(dev_env_file).
@@ -126,7 +126,7 @@ feature 'Suspend a new project with default configuration' do
   end
 
   scenario "config active job queue adapter" do
-    run_suspenders
+    run_stoker
 
     application_config = IO.read("#{project_path}/config/application.rb")
     test_config = IO.read("#{project_path}/config/environments/test.rb")

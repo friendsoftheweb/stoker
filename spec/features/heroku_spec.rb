@@ -2,7 +2,7 @@ require "spec_helper"
 
 feature "Heroku" do
   scenario "Suspend a project for Heroku" do
-    run_suspenders("--heroku=true")
+    run_stoker("--heroku=true")
 
     expect(FakeHeroku).to(
       have_gem_included(project_path, "rails_stdout_logging")
@@ -14,7 +14,7 @@ feature "Heroku" do
 
     bin_setup_path = "#{project_path}/bin/setup"
     bin_setup = IO.read(bin_setup_path)
-    app_name = SuspendersTestHelpers::APP_NAME.dasherize
+    app_name = StokerTestHelpers::APP_NAME.dasherize
 
     expect(bin_setup).to include("heroku join --app #{app_name}-production")
     expect(bin_setup).to include("heroku join --app #{app_name}-staging")
@@ -33,7 +33,7 @@ feature "Heroku" do
   end
 
   scenario "Suspend a project with extra Heroku flags" do
-    run_suspenders(%{--heroku=true --heroku-flags="--region eu"})
+    run_stoker(%{--heroku=true --heroku-flags="--region eu"})
 
     expect(FakeHeroku).to have_created_app_for("staging", "--region eu")
     expect(FakeHeroku).to have_created_app_for("production", "--region eu")

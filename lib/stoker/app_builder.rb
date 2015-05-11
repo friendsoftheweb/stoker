@@ -1,6 +1,6 @@
-module Suspenders
+module Stoker
   class AppBuilder < Rails::AppBuilder
-    include Suspenders::Actions
+    include Stoker::Actions
 
     def readme
       template 'README.md.erb', 'README.md'
@@ -158,7 +158,7 @@ end
     end
 
     def create_application_layout
-      template 'suspenders_layout.html.erb.erb',
+      template 'stoker_layout.html.erb.erb',
         'app/views/layouts/application.html.erb',
         force: true
     end
@@ -178,7 +178,7 @@ end
     end
 
     def set_ruby_to_version_being_used
-      create_file '.ruby-version', "#{Suspenders::RUBY_VERSION}\n"
+      create_file '.ruby-version', "#{Stoker::RUBY_VERSION}\n"
     end
 
     def setup_heroku_specific_gems
@@ -274,8 +274,8 @@ Rack::Timeout.timeout = (ENV["RACK_TIMEOUT"] || 10).to_i
       generate 'rspec:install'
     end
 
-    def configure_unicorn
-      copy_file 'unicorn.rb', 'config/unicorn.rb'
+    def configure_puma
+      copy_file 'puma.rb', 'config/puma.rb'
     end
 
     def setup_foreman
@@ -295,7 +295,7 @@ Rack::Timeout.timeout = (ENV["RACK_TIMEOUT"] || 10).to_i
 
     def gitignore_files
       remove_file '.gitignore'
-      copy_file 'suspenders_gitignore', '.gitignore'
+      copy_file 'stoker_gitignore', '.gitignore'
       [
         'app/views/pages',
         'spec/lib',
