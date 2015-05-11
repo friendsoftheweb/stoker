@@ -30,6 +30,7 @@ module Stoker
     end
 
     def stoker_customization
+      invoke :intro
       invoke :customize_gemfile
       invoke :setup_development_environment
       invoke :setup_test_environment
@@ -50,6 +51,11 @@ module Stoker
       invoke :setup_segment
       invoke :setup_bundler_audit
       invoke :outro
+    end
+
+    def intro
+      say "Getting ready..."
+      %x(if which open > /dev/null; open 'https://www.youtube.com/watch?v=eFTLKWw542g' fi)
     end
 
     def customize_gemfile
@@ -208,8 +214,8 @@ module Stoker
     end
 
     def outro
-      say 'Congratulations! You just pulled our stoker.'
-      say "Remember to run 'rails generate airbrake' with your API key."
+      say 'Congratulations! You just stoked the fire.'
+      say "Remember to run 'rails generate bugsnag' with your API key."
     end
 
     protected

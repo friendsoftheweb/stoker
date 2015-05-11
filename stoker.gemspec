@@ -5,12 +5,12 @@ require 'date'
 
 Gem::Specification.new do |s|
   s.required_ruby_version = ">= #{Stoker::RUBY_VERSION}"
-  s.authors = ['thoughtbot']
+  s.authors = ['Friends of The Web']
   s.date = Date.today.strftime('%Y-%m-%d')
 
   s.description = <<-HERE
-Stoker is a base Rails project that you can upgrade. It is used by
-thoughtbot to get a jump start on a working app. Use Stoker if you're in a
+Stoker is a base Rails + Ember project that you can upgrade. It is used by
+Friends of The Web to get a jump start on a working app. Use Stoker if you're in a
 rush to build something amazing; don't use it if you like missing deadlines.
   HERE
 
