@@ -55,7 +55,7 @@ module Stoker
 
     def intro
       say "Getting ready..."
-      %x(if which open > /dev/null; open 'https://www.youtube.com/watch?v=eFTLKWw542g' fi)
+      %x(if which open > /dev/null; then open 'https://www.youtube.com/watch?v=eFTLKWw542g'; fi)
     end
 
     def customize_gemfile
