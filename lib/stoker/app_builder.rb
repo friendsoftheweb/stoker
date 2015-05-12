@@ -2,6 +2,39 @@ module Stoker
   class AppBuilder < Rails::AppBuilder
     include Stoker::Actions
 
+    def frontend_routes
+      copy_file 'frontend_constraint.rb', 'app/constraints/frontend_constraint.rb'
+      copy_file 'frontend_controller.rb', 'app/controllers/frontend_controller.rb'
+
+      routes = <<-RUBY
+
+  scope constraints: FrontendConstraint do
+    if Rails.env.development?
+      get '/', to: redirect('http://localhost:4200')
+
+      get '*path', to: redirect { |path_params, req|
+        "http://localhost:4200/\#{path_params[:path]}"
+      }
+    end
+
+    root to: 'frontend#index'
+    get '*path', to: 'frontend#index'
+  end
+      RUBY
+
+      inject_into_file("config/routes.rb", routes, after: "Rails.application.routes.draw do")
+    end
+
+    def frontend_heroku_deployment
+      copy_file 'ember.rake', 'lib/tasks/ember.rake'
+      copy_file 'heroku_buildpacks', '.buildpacks'
+    end
+
+    def create_ember_app
+      run "ember new frontend"
+      run "rm -rf frontend/.git"
+    end
+
     def readme
       template 'README.md.erb', 'README.md'
     end
@@ -279,8 +312,11 @@ Rack::Timeout.timeout = (ENV["RACK_TIMEOUT"] || 10).to_i
     end
 
     def setup_foreman
-      copy_file 'sample.env', '.sample.env'
+      copy_file 'env.example', '.env.example'
+      copy_file 'env.example', '.env'
       copy_file 'Procfile', 'Procfile'
+      copy_file 'Procfile.local.example', 'Procfile.local.example'
+      copy_file 'Procfile.local.example', 'Procfile.local'
     end
 
     def setup_stylesheets

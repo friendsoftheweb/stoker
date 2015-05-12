@@ -1,0 +1,3 @@
+web: bin/rails server webrick -p 3000
+worker: bin/rake jobs:work
+frontend: cd ./frontend && ember serve --port=4200 --proxy=http://localhost:3000

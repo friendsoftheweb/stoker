@@ -50,6 +50,7 @@ module Stoker
       invoke :create_github_repo
       invoke :setup_segment
       invoke :setup_bundler_audit
+      invoke :create_frontend
       invoke :outro
     end
 
@@ -77,6 +78,12 @@ module Stoker
       end
 
       build :create_database
+    end
+
+    def create_frontend
+      build :frontend_routes
+      build :frontend_heroku_deployment
+      build :create_ember_app
     end
 
     def setup_development_environment
@@ -216,6 +223,7 @@ module Stoker
     def outro
       say 'Congratulations! You just stoked the fire.'
       say "Remember to run 'rails generate bugsnag' with your API key."
+      say "Also remember to run 'heroku buildpacks:set https://github.com/heroku/heroku-buildpack-multi' to use multiple buildpacks on Heroku."
     end
 
     protected
