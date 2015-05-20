@@ -33,6 +33,13 @@ module Stoker
     def create_ember_app
       run "ember new frontend"
       run "rm -rf frontend/.git"
+      run_frontend "npm install --save-dev ember-cli-sass ember-cli-autoprefixer"
+    end
+
+    def create_ember_proxy_bin
+      copy_file "bin_ember", "bin/ember"
+
+      run "chmod a+x bin/ember"
     end
 
     def readme
@@ -500,6 +507,10 @@ end
     def run_heroku(command, environment)
       path_addition = override_path_for_tests
       run "#{path_addition} heroku #{command} --remote #{environment}"
+    end
+
+    def run_frontend(command)
+      run "(cd frontend; #{command})"
     end
 
     def generate_secret

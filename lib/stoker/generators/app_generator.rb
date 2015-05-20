@@ -84,6 +84,7 @@ module Stoker
       build :frontend_routes
       build :frontend_heroku_deployment
       build :create_ember_app
+      build :create_ember_proxy_bin
     end
 
     def setup_development_environment
