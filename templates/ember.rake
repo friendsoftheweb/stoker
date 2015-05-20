@@ -9,4 +9,8 @@ namespace :ember do
       'rm -rf ./bower_components'
     ].join(' && ')
   end
+
+  task :test do
+    exec '(cd frontend; ember test)'
+  end
 end
